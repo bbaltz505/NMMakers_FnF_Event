@@ -52,18 +52,41 @@ void testArdumoto()
   delay(2000);  
 }
 
+// Slowly speed up both motors to minimize current
+void speedUpBoth(byte spd) {
+  for (int i=0; i<=spd; i+=5) {
+    analogWrite(PWMA, spd);
+    analogWrite(PWMB, spd);
+  }
+  analogWrite(PWMA, spd);
+  analogWrite(PWMB, spd);
+}
+
+// Slowly speed up mone motor to minimize current
+void speedUp(byte pin, byte spd) {
+  for (int i=0; i<=spd; i+=5) {
+    analogWrite(pin, spd);
+  }
+  analogWrite(pin, spd);
+}
+
 // driveArdumoto drives 'motor' in 'dir' direction at 'spd' speed
 void driveArdumoto(byte motor, byte dir, byte spd)
 {
   if (motor == MOTOR_A)
   {
     digitalWrite(DIRA, dir);
-    analogWrite(PWMA, spd);
+    speedUp(PWMA, spd);
   }
   else if (motor == MOTOR_B)
   {
     digitalWrite(DIRB, dir);
-    analogWrite(PWMB, spd);
+    speedUp(PWMB, spd);
+  } else if (motor == MOTOR_BOTH)
+  {
+    digitalWrite(DIRA, dir);
+    digitalWrite(DIRB, dir);
+    speedUpBoth(spd);
   }  
 }
 
@@ -77,8 +100,8 @@ void stopArdumoto(byte motor)
 void forward(int mdelay)
 {
   // Now go forwards at half speed;
-  driveArdumoto(MOTOR_A, CW, 127);  // Motor A at max speed.
-  driveArdumoto(MOTOR_B, CW, 127);  // Motor B at max speed.
+  driveArdumoto(MOTOR_BOTH, CW, 127);  // Motor A at max speed.
+  //driveArdumoto(MOTOR_B, CW, 127);  // Motor B at max speed.
   delay(mdelay);
 }
 
@@ -86,8 +109,8 @@ void forward(int mdelay)
 void backward(int mdelay)
 {
   // Now go backwards at half that speed:
-  driveArdumoto(MOTOR_A, CCW, 127);  // Motor A at half speed.
-  driveArdumoto(MOTOR_B, CCW, 127);  // Motor B at half speed.
+  driveArdumoto(MOTOR_BOTH, CCW, 127);  // Motor A at half speed.
+  //driveArdumoto(MOTOR_B, CCW, 127);  // Motor B at half speed.
   delay(mdelay);
 }
 
@@ -114,7 +137,7 @@ void left(int mdelay)
 //Stop both Motors A and B
 void stopMotors()
 {
-  stopArdumoto(MOTOR_A);  // STOP motor A 
-  stopArdumoto(MOTOR_B);  // STOP motor B 
+  stopArdumoto(MOTOR_BOTH);  // STOP motor A 
+  //stopArdumoto(MOTOR_B);  // STOP motor B 
 }
 

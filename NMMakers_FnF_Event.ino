@@ -27,6 +27,7 @@ NM Site Personnel: T. Marsh, R. Eppes
 // Motor definitions to make life easier:
 const byte MOTOR_A = 0;
 const byte MOTOR_B = 1;
+const byte MOTOR_BOTH = 2;
 // Clockwise and counter-clockwise definitions.
 // Depending on how you wired your motors, you may need to swap.
 const byte CW = 0;
